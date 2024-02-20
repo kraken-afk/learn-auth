@@ -3,7 +3,7 @@ import { SignInForm } from "@/components/sign-in-form";
 import { validateRequest } from "@/lib/auth";
 import { User, sql } from "@/lib/db";
 
-export default async function () {
+export default async function Home() {
 	const { user } = await validateRequest();
 	const result =
 		user &&
