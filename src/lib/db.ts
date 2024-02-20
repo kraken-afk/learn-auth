@@ -7,6 +7,7 @@ export const sql = postgres({
 	user: process.env.PG_USER,
 	password: process.env.PG_PASSWORD,
 	max: 1,
+	ssl: "require",
 });
 
 export type User = {
