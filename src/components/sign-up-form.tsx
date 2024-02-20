@@ -14,9 +14,13 @@ import { signUpSchema } from "@/lib/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/submit-button";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
+	const { toast } = useToast();
+	const router = useRouter();
 	const form = useForm<z.infer<typeof signUpSchema>>({
 		resolver: zodResolver(signUpSchema),
 		defaultValues: {
@@ -25,8 +29,18 @@ export function SignUpForm() {
 			confirmPassword: "",
 		},
 	});
-	const submitHandler = async (data: z.infer<typeof signUpSchema>) =>
-		await signUpAction(data);
+	const submitHandler = async (data: z.infer<typeof signUpSchema>) => {
+		const { status } = (await signUpAction(data)) as { status: number };
+		if (status === 201) {
+			toast({
+				title: "Account created",
+				description: "You will be redirected soon",
+				duration: 2000,
+			});
+			router.replace("/");
+		}
+	};
+
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submitHandler)}>
@@ -69,9 +83,13 @@ export function SignUpForm() {
 						</FormItem>
 					)}
 				/>
-				<Button className=" float-end my-4" type="submit">
+				<SubmitButton
+					pending={form.formState.isSubmitting}
+					className="float-end my-4"
+					type="submit"
+				>
 					Sign up
-				</Button>
+				</SubmitButton>
 			</form>
 		</Form>
 	);

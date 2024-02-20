@@ -1,6 +1,8 @@
 "use client";
 
 import { Button, ButtonProps } from "@/components/ui/button";
+import { lucia } from "@/lib/auth";
+import { OptionIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -31,7 +33,11 @@ export function NavBar() {
 	return (
 		<div className="fixed top-0 w-full">
 			<nav className="mx-auto w-11/12 sm:w-4/5 bg-white border border-black p-3 mt-6 rounded-md flex justify-between items-center">
-				<span>{path}</span>
+				<span>
+					<OptionIcon size={12} className="inline" />
+					{"  "}
+					{path}
+				</span>
 				<div className="flex gap-3">
 					{buttons
 						.filter(({ endpoint }) => endpoint.some((uri) => uri === path))
